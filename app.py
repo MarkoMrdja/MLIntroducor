@@ -12,6 +12,41 @@ st.set_page_config(
     layout="wide"
 )
 
+def check_authentication():
+    """Check if user is authenticated"""
+    if "authenticated" not in st.session_state:
+        st.session_state.authenticated = False
+    
+    if not st.session_state.authenticated:
+        st.title("🔐 Prijavite se")
+        st.markdown("Molimo unesite pristupne podatke za korišćenje aplikacije.")
+        
+        with st.form("login_form"):
+            username = st.text_input("Korisničko ime")
+            password = st.text_input("Lozinka", type="password")
+            submit_button = st.form_submit_button("Prijavite se")
+            
+            if submit_button:
+                if username == Config.APP_USERNAME and password == Config.APP_PASSWORD:
+                    st.session_state.authenticated = True
+                    st.success("Uspešno ste se prijavili!")
+                    st.rerun()
+                else:
+                    st.error("Neispravno korisničko ime ili lozinka.")
+        
+        st.markdown("---")
+        st.markdown("**Napomena:** Ovo je zaštićena aplikacija. Kontaktirajte administratora za pristupne podatke.")
+        return False
+    
+    return True
+
+def show_logout_option():
+    """Show logout option in sidebar"""
+    st.sidebar.markdown("---")
+    if st.sidebar.button("🚪 Odjavite se"):
+        st.session_state.authenticated = False
+        st.rerun()
+
 @st.cache_resource
 def initialize_rag_system():
     """Initialize the RAG system (cached for performance)"""
@@ -71,6 +106,10 @@ def process_documents():
         return False
 
 def main():
+    # Check authentication first
+    if not check_authentication():
+        return
+    
     st.title(Config.APP_TITLE)
     st.markdown(Config.APP_DESCRIPTION)
     
@@ -80,6 +119,9 @@ def main():
         "Izaberite režim:",
         ["📚 Postavi pitanje", "🎯 Generiši kviz", "📝 Vežbaj ispitna pitanja", "⚙️ Podešavanja"]
     )
+    
+    # Show logout option
+    show_logout_option()
     
     # Initialize RAG system
     rag = initialize_rag_system()

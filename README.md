@@ -58,12 +58,19 @@ pip install streamlit langchain openai chromadb pypdf python-dotenv sentence-tra
 ### 2. Configuration
 Create `.env` file with your Azure OpenAI credentials:
 ```bash
+# Azure OpenAI Configuration
 AZURE_OPENAI_ENDPOINT=https://your-resource.openai.azure.com/
 AZURE_OPENAI_API_KEY=your_api_key_here
 AZURE_API_VERSION=2024-02-15-preview
 AZURE_CHAT_DEPLOYMENT=your-gpt4-deployment-name
 AZURE_EMBEDDING_DEPLOYMENT=your-embedding-deployment-name
+
+# Application Authentication (NEW!)
+APP_USERNAME=admin
+APP_PASSWORD=your-secure-password-here
 ```
+
+> **🔒 Security Note**: The app now includes basic authentication to prevent unauthorized access when deployed. Default credentials are `admin/changeme123` - **make sure to change these in production!**
 
 ### 3. Add Your Materials
 ```bash
