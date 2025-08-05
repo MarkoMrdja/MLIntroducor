@@ -178,6 +178,21 @@ ISPRAVKA:
         """Wrapper for backward compatibility"""
         return self.setup_vectorstore_with_retry(documents)
     
+    def add_documents_to_vectorstore(self, new_documents: List[Document]):
+        """Add new documents to existing vector store"""
+        if not self.vectorstore:
+            # If no existing vectorstore, create one
+            return self.setup_vectorstore(new_documents)
+        
+        # Add documents to existing vectorstore
+        try:
+            self.vectorstore.add_documents(new_documents)
+            print(f"Added {len(new_documents)} new documents to vector store")
+            return True
+        except Exception as e:
+            print(f"Error adding documents to vector store: {str(e)}")
+            return False
+    
     def load_existing_vectorstore(self):
         """Load existing vector store"""
         if os.path.exists(self.persist_directory):

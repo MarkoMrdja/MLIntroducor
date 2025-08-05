@@ -61,3 +61,6 @@ vector_db/
 
 # Other
 *.sqlite3
+
+# Local metadata files
+blob_metadata.json

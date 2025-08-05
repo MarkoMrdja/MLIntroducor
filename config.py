@@ -15,6 +15,12 @@ class Config:
     # Authentication Configuration
     APP_USERNAME = os.getenv("APP_USERNAME")
     APP_PASSWORD = os.getenv("APP_PASSWORD")
+    
+    # Azure Blob Storage Configuration
+    AZURE_STORAGE_CONNECTION_STRING = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
+    AZURE_STORAGE_CONTAINER_NAME = os.getenv("AZURE_STORAGE_CONTAINER_NAME", "ml-documents")
+    BLOB_MATERIAL_PREFIX = os.getenv("BLOB_MATERIAL_PREFIX", "material/")
+    BLOB_QUESTIONS_PREFIX = os.getenv("BLOB_QUESTIONS_PREFIX", "questions/")
 
     # Paths
     DATA_DIR = "./data"
@@ -48,6 +54,8 @@ class Config:
             raise ValueError("APP_USERNAME nije podešen. Dodajte ga u .env fajl.")
         if not Config.APP_PASSWORD:
             raise ValueError("APP_PASSWORD nije podešen. Dodajte ga u .env fajl.")
+        if not Config.AZURE_STORAGE_CONNECTION_STRING:
+            raise ValueError("AZURE_STORAGE_CONNECTION_STRING nije podešen. Dodajte ga u .env fajl.")
         
         # Create directories if they don't exist
         os.makedirs(Config.MATERIAL_DIR, exist_ok=True)

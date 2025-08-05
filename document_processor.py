@@ -48,6 +48,35 @@ class DocumentProcessor:
         
         return documents
     
+    def process_single_document(self, file_path: str, doc_type: str = "material", source_name: str = None) -> List[Document]:
+        """Process a single document file and return chunked documents"""
+        if source_name is None:
+            source_name = Path(file_path).name
+        
+        if file_path.lower().endswith('.pdf'):
+            text = self.extract_text_from_pdf(file_path)
+            
+            # Smart chunking based on document type and content
+            chunks = self._smart_chunk_document(text, source_name)
+            
+            documents = []
+            for i, chunk in enumerate(chunks):
+                doc = Document(
+                    page_content=chunk,
+                    metadata={
+                        "source": source_name,
+                        "chunk_id": i,
+                        "doc_type": doc_type,
+                        "total_chunks": len(chunks),
+                        "chunk_type": self._identify_chunk_type(chunk, source_name)
+                    }
+                )
+                documents.append(doc)
+            
+            return documents
+        else:
+            raise ValueError(f"Unsupported file type: {file_path}")
+    
     def _smart_chunk_document(self, text: str, filename: str) -> List[str]:
         """Smart chunking based on document structure"""
         

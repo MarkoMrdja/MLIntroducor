@@ -9,3 +9,5 @@ python-dotenv
 sentence-transformers
 tiktoken
 numpy
+azure-storage-blob
+azure-identity
